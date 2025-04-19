@@ -3,14 +3,16 @@
 # author: Agnieszka Sobień-Lewandowska
 # email: agnieszka.sobien@gmail.com
 # discord: Agnieszka_SL
-"""""""""
-#Import random 
+""""""""" 
 import random
+import time
 
 # Initializing program 
-print("Welcome! I've generated a random 4 digit number for you. Let's play a bulls and cows game.")
+print("Welcome! \
+    I've generated a random 4 digit number for you.\
+    Let's play a bulls and cows game.")
 
-#Generate random number
+#Generate 4-digit random number
 def generate_number():
     digits = list(range(10))
     random.shuffle(digits)
@@ -23,9 +25,7 @@ def generate_number():
                 break
 
 #Turn 4 digits into a string
-    number = ''.join(str(d) 
-    for d in digits[:4])
-    return number
+    return ''. join(str(d) for d in digits [:4])
 
 #Ensuring validity of the input
 def is_valid_guess(guess):
@@ -45,7 +45,7 @@ def is_valid_guess(guess):
         return False
     return True
 
-#Compare user's guess with generated number
+#Compares user's guess with generated number and returns bulls and cows count
 def evaluate_guess(secret, guess):
     bulls = sum(1 for i in range(4) if guess[i] == secret[i])
     cows = sum(1 for i in range(4) if guess[i] in secret and guess[i] != secret[i])
@@ -54,6 +54,8 @@ def evaluate_guess(secret, guess):
 #Main game part
 def main():
     secret_number = generate_number()
+    attempts = 0
+    start_time = time.time()
     
     while True:
         #User's guess
@@ -62,12 +64,17 @@ def main():
         if not is_valid_guess(user_guess):
             continue
         
+        attempts += 1
         bulls, cows = evaluate_guess(secret_number, user_guess)
         print(f"{bulls} bull{'s' if bulls != 1 else ''}, {cows} cow{'s' if cows != 1 else ''}")
         
         if bulls == 4:
-            print("Congratulations! You've guessed the number correctly.")
+            #Calculate the duration by substrating start_time from the curent time
+            duration = round(time.time() - start_time, 2)
+            print(f"Congratulations! You've guessed the number correctly in {attempts} attempts.")
+            print (f"Time spent: {duration} seconds.")
             break
 
-main()
+if __name__ == "__main__":
+    main()
 
